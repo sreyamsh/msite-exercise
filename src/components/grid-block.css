@@ -1,9 +1,18 @@
 .container {
 	display: grid;
-	text-align: center;
+	border: 1px solid black;
+	align-items: center;
+	justify-items: center;
 }
 
 .container > img {
-	width: 100px;
-	height: 100px;
+	width: 70%;
+	margin-top: 5px;
+}
+
+@media (min-width: 500px) {
+	.container > img {
+		width: 80%;
+		max-width: 600px;
+	}
 }

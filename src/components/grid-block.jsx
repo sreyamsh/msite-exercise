@@ -1,17 +1,13 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './grid-block.css';
 
-
-class GridBlock extends Component {
-    state = {  }
-    render() { 
-        return ( 
-            <div key={this.props.num} className="container">
-                <img src={this.props.source} alt={this.props.tilte} />
-                <h4>{this.props.title}</h4>
-            </div>
-         );
-    }
+function GridBlock(props) {
+    return (
+        <div className="container">
+            <img src={props.source} alt={props.title}/>
+            <h4>{props.title}</h4>
+        </div>
+    );
 }
  
 export default GridBlock;

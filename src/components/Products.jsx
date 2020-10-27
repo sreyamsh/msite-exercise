@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import axios from './axios-instance';
 import GridBlock from './grid-block';
 import Heading from './Heading';
+import Loader from './Loader';
 import './Products.css';
 
 class Products extends Component {
@@ -13,7 +14,7 @@ class Products extends Component {
         }
     }
     // use arrow function
-    getData() {
+    getData = () => {
         axios
             .get('photos?_limit=10')
             .then(res => this.setState({ data : res.data }))
@@ -21,11 +22,16 @@ class Products extends Component {
     }
 
     render() {
+        
         const gridBoxes = this.state.data.map((photo) => {
             return (
-                <GridBlock num={photo.id} source={photo.url} title={photo.title} />
+                <GridBlock key={photo.id} source={photo.url} title={photo.title} />
             );
         });
+
+        if(this.state.data.length === 0) {
+            return <Loader />;
+        }
 
         return (
             <React.Fragment>
