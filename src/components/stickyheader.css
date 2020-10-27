@@ -1,0 +1,15 @@
+.Page-header {
+	background-color: #00994f;
+	text-align: center;
+	color: white;
+	padding: 10px;
+}
+
+.header-title {
+	display: inline-block;
+	margin: 2px;
+}
+
+#logo {
+	width: 20px;
+}
