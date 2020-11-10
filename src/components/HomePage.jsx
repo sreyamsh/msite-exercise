@@ -1,46 +1,34 @@
 import React, {Component} from 'react';
 import Heading from './Heading';
-import axios from './axios-instance';
 import GridBlock from './grid-block';
 import { Link } from 'react-router-dom';
 import Loader from './Loader';
-
+import { connect } from 'react-redux';
+import { fetchData } from '../actions/homeActions';
 
 class HomePage extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            data: []
-        }
-    }
-
-    // use arrow function
-    getData = () => {
-        axios
-            .get('/photos/1')
-            .then(res => this.setState({ data: res.data }))
-            .catch(err => console.log(err))
+    componentDidMount() {
+        this.props.fetchData();
     }
 
     render() {
-
-        if(this.state.data.length === 0){
+        if(this.props.home.length === 0 || Array.isArray(this.props.home.data)){
             return <Loader />;
         }
 
         return (
             <React.Fragment>
                 <Heading title={this.props.title} />
-                <GridBlock source={this.state.data.url} title={this.state.data.title} />
+                <GridBlock source={this.props.home.data.url} title={this.props.home.data.title} />
                 <Link  to='/products-list' >See full List</Link>
             </React.Fragment>
         );
     }
-
-    componentDidMount() {
-        this.getData();
-    }
 }
 
-export default HomePage;
+const mapStateToProps = state => ({
+    home: state.home.items
+});
+
+export default connect(mapStateToProps, { fetchData })(HomePage);

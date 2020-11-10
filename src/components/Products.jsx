@@ -1,49 +1,42 @@
-import React, {Component} from 'react';
-import axios from './axios-instance';
-import GridBlock from './grid-block';
+import React, { Component, Suspense }  from 'react';
 import Heading from './Heading';
 import Loader from './Loader';
+import GridBlock from './grid-block';
 import './Products.css';
+import { connect } from 'react-redux';
+import { fetchData } from '../actions/productActions';
+// const GridBlock = React.lazy(() => import('./grid-block'));
 
 class Products extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            data: []
-        }
-    }
-    // use arrow function
-    getData = () => {
-        axios
-            .get('photos?_limit=10')
-            .then(res => this.setState({ data : res.data }))
-            .catch(err => console.log(err))
+    componentDidMount() {
+        this.props.fetchData();
     }
 
     render() {
-        
-        const gridBoxes = this.state.data.map((photo) => {
+        if(this.props.products.length === 0 || !Array.isArray(this.props.products.data)) {
+            return <Loader />;
+        }
+
+        const gridBoxes = this.props.products.data.map((photo) => {
             return (
                 <GridBlock key={photo.id} source={photo.url} title={photo.title} />
             );
         });
 
-        if(this.state.data.length === 0) {
-            return <Loader />;
-        }
-
         return (
             <React.Fragment>
                 <Heading title={this.props.title} />
-                <div className="wrapper">{gridBoxes}</div>
+                <Suspense fallback={<Loader className="wrapper" />} >
+                    <div className="wrapper">{gridBoxes}</div>
+                </Suspense>
             </React.Fragment>
         );
     }
-
-    componentDidMount() {
-        this.getData();
-    }
 }
 
-export default Products;
+const mapStateToProps = state => ({
+    products: state.products.items
+});
+
+export default connect(mapStateToProps, { fetchData })(Products);
